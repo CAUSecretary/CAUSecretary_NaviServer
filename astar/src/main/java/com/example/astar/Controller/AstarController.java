@@ -23,8 +23,10 @@ public class AstarController {
 
         Astar astar = new Astar();
 
-        json.put("weigh routing", astar.getPath(astar.aStar_weigh(47, 1)));
-        json.put("distance routing", astar.getPath(astar.aStar_distance(47, 1)));
+        astar.aStar_weigh(38, 1);
+
+        json.put("weigh routing", astar.getPath(astar.aStar_weigh(38, 1)));
+        //json.put("distance routing", astar.getPath(astar.aStar_distance(47, 1)));
 
         return json.toString(4);
     }
@@ -42,14 +44,19 @@ public class AstarController {
         System.out.println("startLon: " +startLon);
         System.out.println("endPoint: " + endPoint);
 
+        double sLat = Double.parseDouble(startLat);
+        double sLon = Double.parseDouble(startLon);
 
         Astar astar = new Astar();
 
-        //int startPointId = astar.getNearestNodeId();
+        int startPointId = astar.getNearestNodeId_ByLatLon(sLat,sLon);
+        int endPointId = astar.getNearestNodeId_InTargetName(sLat, sLon, endPoint);
+        System.out.println("startPointId : " + startPointId + " endPointId : " + endPointId);
+        System.out.println(astar.getPath(astar.aStar_weigh(startPointId, endPointId)));
 
-        json.add("nodes", astar.getNodeList_JsonArray(47, 1));
-        json.add("edges", astar.getEdgeList_JsonArray(47, 1));
-        System.out.println(astar.getPath(astar.aStar_weigh(47, 1)));
+        json.add("nodes", astar.getNodeList_JsonArray(startPointId, endPointId));
+        json.add("edges", astar.getEdgeList_JsonArray(startPointId, endPointId));
+
 
         return json.toString();
     }

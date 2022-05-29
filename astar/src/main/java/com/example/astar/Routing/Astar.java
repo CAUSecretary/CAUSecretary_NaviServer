@@ -31,18 +31,35 @@ public class Astar {
 
     }
 
-
-    public int getNearestNodeId(double lat, double lon, String target) {
-        List<Node> targetNodeList = getDestinationsByName(target);
+    public int getNearestNodeId_ByLatLon(double lat, double lon) {
         int nearestNodeNum = 0;
         double minLength = Double.MAX_VALUE;
-        for (int i = 1; i < targetNodeList.size(); i++) {
+        for (int i = 1; i < nodesList.size(); i++) {
+            double latGap = (nodesList.get(i).lat - lat);
+            double lonGap = (nodesList.get(i).lon - lon);
+            double tempLength = Math.sqrt(latGap * latGap + lonGap * lonGap);
+            // 최소 갱신
+            if (minLength > tempLength) {
+                nearestNodeNum = i;
+                minLength = tempLength;
+            }
+        }
+
+        return nearestNodeNum;
+    }
+
+    public int getNearestNodeId_InTargetName(double lat, double lon, String target) {
+        List<Node> targetNodeList = getDestinationsByName(target);
+
+        int nearestNodeNum = 0;
+        double minLength = Double.MAX_VALUE;
+        for (int i = 0; i < targetNodeList.size(); i++) {
             double latGap = (targetNodeList.get(i).lat - lat);
             double lonGap = (targetNodeList.get(i).lon - lon);
             double tempLength = Math.sqrt(latGap * latGap + lonGap * lonGap);
             // 최소 갱신
             if (minLength > tempLength) {
-                nearestNodeNum = i;
+                nearestNodeNum = targetNodeList.get(i).id;
                 minLength = tempLength;
             }
         }
@@ -55,10 +72,14 @@ public class Astar {
         List<Node> result = new ArrayList<>();
 
         for (int i = 1; i < nodesList.size(); i++) {
-            if (nodesList.get(i).name.contains(target)) {
+
+
+            if (nodesList.get(i).name != null && nodesList.get(i).name.contains(target)) {
                 result.add(nodesList.get(i));
+                System.out.print(i + " " + nodesList.get(i).name);
             }
         }
+        System.out.println();
 
         return result;
     }
@@ -155,7 +176,9 @@ public class Astar {
         // 갈수있는 곳이 더이상 없을 때까지
         while(!openList.isEmpty()){
             Node n = openList.peek();
+            //System.out.println(n.id + " " + n.name);
             if(n == target){
+                //System.out.println("목적지 찾음");
                 return getPath(target);
             }
 
@@ -168,6 +191,7 @@ public class Astar {
                     m.parent = n;
                     m.g = totalWeight; //이전까지의 g + 이번 링크의 가중치
                     m.f = m.g + m.calculateHeuristic(target); // f= g+h
+                    //System.out.println(m.id + " " + m.name);
                     openList.add(m);
                 } else {
                     // 탐색해본적 있으면서 최소값 갱신하는 경우
@@ -188,7 +212,7 @@ public class Astar {
             openList.remove(n);
             closedList.add(n);
         }
-        return null;
+        return getPath(target);
     }
 
     public List<Integer> aStar_distance(int s, int t){
@@ -210,12 +234,13 @@ public class Astar {
             for(Edge edge : adjList.get(n.id)){
                 Node m = nodesList.get(edge.end);
                 double totalWeight = n.g + edge.distance;
-                //System.out.println(totalWeight + " " + m.g);
+
                 // 아직 탐색해본적이 없으면
                 if(!openList.contains(m) && !closedList.contains(m)){
                     m.parent = n;
                     m.g = totalWeight;
                     m.f = m.g + m.calculateHeuristic(target);
+                    //System.out.println(m.id + " " + m.name);
                     openList.add(m);
                 } else {
                     if(totalWeight < m.g){
@@ -370,11 +395,11 @@ class Node implements Comparable<Node>{
 
 
     // 두 좌표 거리 m로 구하기
-    public int calculateHeuristic(Node target) {
+    public double calculateHeuristic(Node target) {
         double x = (Math.cos(lat) * 6400 * 2 * 3.14 / 360) * Math.abs(lon - target.lon);
         double y = 111 * Math.abs(lat - target.lat);
         double d = Math.sqrt(x * x + y * y);
-        return (int) (d * 1000);
+        return d;
     }
 
     @Override
