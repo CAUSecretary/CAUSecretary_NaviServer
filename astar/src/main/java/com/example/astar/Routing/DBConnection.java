@@ -11,9 +11,9 @@ import java.sql.SQLException;	//sql 쿼리의 예외처리를 위한 import
 public class DBConnection {
 
     private static final String DB_DRIVER_CLASS = "org.mariadb.jdbc.Driver";
-    private static final String DB_URL = "jdbc:mariadb://127.0.0.1:3300/astar";
-    private static final String DB_USERNAME = "root";
-    private static final String DB_PASSWORD = "bs970923";
+    private static final String DB_URL = "jjdbc:mysql://causecretarydb.cfoadhgjb3mf.ap-northeast-2.rds.amazonaws.com:3306/astar";
+    private static final String DB_USERNAME = "causecretarydb";
+    private static final String DB_PASSWORD = "smilecau1234";
 
     //접속부
     public static Connection getConnection() {
