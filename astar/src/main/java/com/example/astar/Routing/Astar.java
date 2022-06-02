@@ -97,7 +97,7 @@ public class Astar {
 //        return aStar_weigh(getNearestNode(s_lat, s_lon).id, 0);
 //    }
 
-    public JsonArray getNodeList_JsonArray(int s, int e){
+    public JsonArray getWeighNodeList_JsonArray(int s, int e){
         JsonArray jsonArray = new JsonArray();
         for (Node node : getNodeList_aStar_weigh(s, e)) {
             JsonObject nodeJson = new JsonObject();
@@ -114,7 +114,7 @@ public class Astar {
         return jsonArray;
     }
 
-    public JsonArray getEdgeList_JsonArray(int s, int e){
+    public JsonArray getWeighEdgeList_JsonArray(int s, int e){
         JsonArray jsonArray = new JsonArray();
         for (Edge edge : getEdgeList_aStar_weigh(s, e)) {
             JsonObject edgeJson = new JsonObject();

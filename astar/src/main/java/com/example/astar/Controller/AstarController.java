@@ -32,8 +32,8 @@ public class AstarController {
     }
 
 
-    @RequestMapping(value="/search", method={ RequestMethod.GET, RequestMethod.POST })
-    public String getRoute(HttpServletRequest request ) throws Exception {
+    @RequestMapping(value="/search/weigh", method={ RequestMethod.GET, RequestMethod.POST })
+    public String getRoute_weigh(HttpServletRequest request ) throws Exception {
 
         JsonObject json = new JsonObject();
         String startLat = request.getParameter("startLat");
@@ -54,9 +54,30 @@ public class AstarController {
         System.out.println("startPointId : " + startPointId + " endPointId : " + endPointId);
         System.out.println(astar.getPath(astar.aStar_weigh(startPointId, endPointId)));
 
-        json.add("nodes", astar.getNodeList_JsonArray(startPointId, endPointId));
-        json.add("edges", astar.getEdgeList_JsonArray(startPointId, endPointId));
+        json.add("nodes", astar.getWeighNodeList_JsonArray(startPointId, endPointId));
+        json.add("edges", astar.getWeighEdgeList_JsonArray(startPointId, endPointId));
 
+
+        return json.toString();
+    }
+
+    @RequestMapping(value="/search/distance", method={ RequestMethod.GET, RequestMethod.POST })
+    public String getRoute_distance(HttpServletRequest request ) throws Exception {
+
+        JsonObject json = new JsonObject();
+        String startLat = request.getParameter("startLat");
+        String startLon = request.getParameter("startLon");
+        String endPoint = request.getParameter("endPoint");
+
+        double sLat = Double.parseDouble(startLat);
+        double sLon = Double.parseDouble(startLon);
+        Astar astar = new Astar();
+
+        int startPointId = astar.getNearestNodeId_ByLatLon(sLat,sLon);
+        int endPointId = astar.getNearestNodeId_InTargetName(sLat, sLon, endPoint);
+
+        json.add("nodes", astar.getWeighNodeList_JsonArray(startPointId, endPointId));
+        json.add("edges", astar.getWeighEdgeList_JsonArray(startPointId, endPointId));
 
         return json.toString();
     }
