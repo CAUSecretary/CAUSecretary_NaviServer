@@ -3,7 +3,8 @@ package com.example.astar.Controller;
 import com.example.astar.DTO.NodeDTO;
 import com.example.astar.Routing.Astar;
 import com.google.gson.JsonObject;
-import org.springframework.boot.configurationprocessor.json.JSONObject;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -29,6 +30,13 @@ public class AstarController {
         //json.put("distance routing", astar.getPath(astar.aStar_distance(47, 1)));
 
         return json.toString(4);
+    }
+
+    @RequestMapping(value="/test", method={ RequestMethod.GET, RequestMethod.POST })
+    public String test( HttpServletRequest request ) throws Exception {
+
+
+        return "hello";
     }
 
 

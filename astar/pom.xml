@@ -83,6 +83,11 @@
             <version>3.2.4</version>
             <type>maven-plugin</type>
         </dependency>
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20200518</version>
+        </dependency>
     </dependencies>
 
 
